@@ -142,12 +142,18 @@ func (md *Doc) WriteLinkLine(desc, url string) (*Doc, error) {
 // WriteTable writes the given table.
 func (md *Doc) WriteTable(t *Table) (*Doc, error) {
 	err := md.write(t.GetTable())
+	if err != nil {
+		return nil, err
+	}
 	return md, err
 }
 
 // WriteList writes the given list to the document.
 func (md *Doc) WriteList(tree *ListNode) (*Doc, error) {
 	_, err := md.Write(tree.GetList(0))
+	if err != nil {
+		return nil, err
+	}
 	return md, err
 }
 
