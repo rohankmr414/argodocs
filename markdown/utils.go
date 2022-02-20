@@ -11,7 +11,7 @@ func GetHeader(content string, level int) string {
 }
 
 // GetMultiCode returns a multi-line code block for the given text with the given language.
-func GetMultiCode(content string, contentType string) string {
+func GetMultiCode(contentType, content string) string {
 	return fmt.Sprintf("``` %s\n%s\n```\n", contentType, content)
 }
 

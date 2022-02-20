@@ -17,15 +17,7 @@ func NewDoc() *Doc {
 	return md
 }
 
-// WriteLevel1Title writes an H1 title for the given text.
-func (md *Doc) WriteLevel1Title(content string) (*Doc, error) {
-	_, err := md.WriteHeader(content, 1)
-	if err != nil {
-		return nil, err
-	}
-	return md, nil
-}
-
+// write appends the given string to the document.
 func (md *Doc) write(content string) error {
 	_, err := md.builder.WriteString(content)
 	return err
@@ -95,19 +87,6 @@ func (md *Doc) WriteMultiCode(content, t string) (*Doc, error) {
 	return md, nil
 }
 
-// WriteCodeLine writes a single line of highlighted code for the given text..
-func (md *Doc) WriteCodeLine(content string) (*Doc, error) {
-	_, err := md.WriteCode(content)
-	if err != nil {
-		return nil, err
-	}
-	_, err = md.Writeln()
-	if err != nil {
-		return nil, err
-	}
-	return md, nil
-}
-
 // WriteCode writes a single line of highlighted code for the given text.
 func (md *Doc) WriteCode(content string) (*Doc, error) {
 	err := md.write(GetMonospaceCode(content))
@@ -126,19 +105,6 @@ func (md *Doc) WriteLink(desc, url string) (*Doc, error) {
 	return md, nil
 }
 
-// WriteLinkLine writes a link for the given text and url with a newline.
-func (md *Doc) WriteLinkLine(desc, url string) (*Doc, error) {
-	_, err := md.WriteLink(desc, url)
-	if err != nil {
-		return nil, err
-	}
-	_, err = md.WriteLines(2)
-	if err != nil {
-		return nil, err
-	}
-	return md, nil
-}
-
 // WriteTable writes the given table.
 func (md *Doc) WriteTable(t *Table) (*Doc, error) {
 	err := md.write(t.GetTable())
@@ -150,7 +116,7 @@ func (md *Doc) WriteTable(t *Table) (*Doc, error) {
 
 // WriteList writes the given list to the document.
 func (md *Doc) WriteList(tree *ListNode) (*Doc, error) {
-	_, err := md.Write(tree.GetList(0))
+	_, err := md.Write(tree.GetList(0, 0))
 	if err != nil {
 		return nil, err
 	}
