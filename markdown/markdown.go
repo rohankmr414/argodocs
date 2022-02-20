@@ -37,16 +37,16 @@ func (md *Doc) Write(content string) *Doc {
 	return md
 }
 
-// Writeln writes a new line.
-func (md *Doc) Writeln() *Doc {
-	md.write("\n")
+// Writeln writes a string to the document and appends a newline.
+func (md *Doc) Writeln(content string) *Doc {
+	md.write(content + "\n")
 	return md
 }
 
 // WriteLines writes a given number of new lines.
 func (md *Doc) WriteLines(lines int) *Doc {
 	for i := 0; i < lines; i++ {
-		md.Writeln()
+		md.write("\n")
 	}
 	return md
 }
