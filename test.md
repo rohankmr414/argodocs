@@ -4,11 +4,11 @@
 
 |Kind|Version|Entrypoint Template|Last Updated At|
 |----|----|----|----|
-|WorkflowTemplate|argoproj.io/v1alpha1|main|Monday, 21-Feb-22 02:00:58 IST|
+|WorkflowTemplate|argoproj.io/v1alpha1|main|Monday, 21-Feb-22 02:21:40 IST|
 
 S3 Output Reference - which directory will have what data once the workflow completes
 
-``` 
+```
 <bucket_name>/argo-artifacts/<connection-qualified-name>
 ├── current-state                 -> tarball of `transformed_metadata/`
 ├── lineage-current-state         -> tarball of `lineage-output`

@@ -43,38 +43,38 @@ func (md *Doc) Writeln(content string) *Doc {
 // WriteLines writes a given number of new lines.
 func (md *Doc) WriteLines(lines int) *Doc {
 	for i := 0; i < lines; i++ {
-		md.write("\n")
+		md.write("<br>\n")
 	}
 	return md
 }
 
 // WriteMultiCode writes a multi-line code block for the given text with the given language.
 func (md *Doc) WriteMultiCode(content, t string) *Doc {
-	md.write(GetMultiCode(content, t))
+	md.write(GetMultiCode(content, t) + "\n")
 	return md
 }
 
 // WriteCode writes a single line of highlighted code for the given text.
 func (md *Doc) WriteCode(content string) *Doc {
-	md.write(GetMonospaceCode(content))
+	md.write(GetMonospaceCode(content) + "\n")
 	return md
 }
 
 // WriteLink writes a link for the given text and url.
 func (md *Doc) WriteLink(desc, url string) *Doc {
-	md.write(GetLink(desc, url))
+	md.write(GetLink(desc, url) + "\n")
 	return md
 }
 
 // WriteTable writes the given table.
 func (md *Doc) WriteTable(t *Table) *Doc {
-	md.write(t.GetTable())
+	md.write(t.GetTable() + "\n")
 	return md
 }
 
 // WriteList writes the given list to the document.
 func (md *Doc) WriteList(tree *ListNode) *Doc {
-	md.Write(tree.GetList(0, -1))
+	md.Write(tree.GetList(0, -1) + "\n")
 	return md
 }
 
