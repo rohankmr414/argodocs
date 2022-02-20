@@ -24,16 +24,13 @@ func (md *Doc) write(content string) {
 
 // WriteHeader writes header for a string with provided level.
 func (md *Doc) WriteHeader(content string, level int) *Doc {
-	md.write(GetHeader(content, level))
-	md.Writeln()
-
+	md.write(GetHeader(content, level) + "\n")
 	return md
 }
 
 // Write writes a string to the document.
 func (md *Doc) Write(content string) *Doc {
 	md.write(content)
-
 	return md
 }
 
