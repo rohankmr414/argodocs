@@ -5,10 +5,14 @@ import (
 	"strings"
 )
 
+// ListType is an enumeration of list types.
 type ListType int
 
 const (
+	// ListTypeOrdered is an ordered list.
 	ListTypeOrdered ListType = iota
+
+	// ListTypeUnordered is an unordered list.
 	ListTypeUnordered
 )
 
@@ -17,7 +21,7 @@ type ListNode struct {
 	// Value is the content of the list item.
 	Value string
 
-	// NodeType is the type of the Children list(ListTypeOrdered | ListTypeUnordered).
+	// NodeType is the type of the parent list(ListTypeOrdered | ListTypeUnordered).
 	NodeType ListType
 
 	// Children is the child nodes(nested list) of the list item.
