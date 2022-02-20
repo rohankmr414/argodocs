@@ -50,7 +50,7 @@ func parseTask(node *yaml.Node) (*Task, error) {
 				if err != nil {
 					return nil, err
 				}
-				result.Template = strings.Join([]string{name, templateName}, "/")
+				result.Template = strings.Join([]string{name, templateName}, "::")
 			case "dependencies":
 				var dependencies []string
 				for _, dependencyNode := range node.Content[index+1].Content {
