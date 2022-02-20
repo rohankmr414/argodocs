@@ -1,7 +1,6 @@
 package markdown
 
 import (
-	"fmt"
 	"io/ioutil"
 	"os"
 	"strings"
@@ -9,19 +8,6 @@ import (
 
 type Doc struct {
 	builder *strings.Builder
-}
-
-type Table struct {
-	body [][]string
-}
-
-// ListNode is a node of the list tree.
-type ListNode struct {
-	// Value is the content of the list item.
-	Value string
-
-	// Children is the child nodes(nested list) of the list item.
-	Children []*ListNode
 }
 
 // NewDoc creates a new Markdown document struct.
@@ -32,177 +18,137 @@ func NewDoc() *Doc {
 }
 
 // WriteLevel1Title writes an H1 title for the given text.
-func (md *Doc) WriteLevel1Title(content string) *Doc {
-	md.WriteTitle(content, 1)
-	return md
+func (md *Doc) WriteLevel1Title(content string) (*Doc, error) {
+	_, err := md.WriteHeader(content, 1)
+	if err != nil {
+		return nil, err
+	}
+	return md, nil
 }
 
-func (md *Doc) write(content string) {
-	md.builder.WriteString(content)
+func (md *Doc) write(content string) error {
+	_, err := md.builder.WriteString(content)
+	return err
 }
 
-// GetTitle returns header for a string with provided level.
-func (md *Doc) GetTitle(content string, level int) string {
-	return strings.Repeat("#", level) + " " + content
-}
-
-// WriteTitle writes header for a string with provided level.
-func (md *Doc) WriteTitle(content string, level int) *Doc {
-	md.write(md.GetTitle(content, level))
-	md.Writeln()
-	return md
+// WriteHeader writes header for a string with provided level.
+func (md *Doc) WriteHeader(content string, level int) (*Doc, error) {
+	err := md.write(GetHeader(content, level))
+	if err != nil {
+		return nil, err
+	}
+	_, err = md.Writeln()
+	if err != nil {
+		return nil, err
+	}
+	return md, nil
 }
 
 // WriteWordLine writes a line with provided text with a newline.
-func (md *Doc) WriteWordLine(content string) *Doc {
-	md.Write(content)
-	md.Writeln()
-	return md
+func (md *Doc) WriteWordLine(content string) (*Doc, error) {
+	err := md.write(content)
+	if err != nil {
+		return nil, err
+	}
+	_, err = md.Writeln()
+	if err != nil {
+		return nil, err
+	}
+	return md, nil
 }
 
 // Write writes a string to the document.
-func (md *Doc) Write(content string) *Doc {
-	md.write(content)
-	return md
+func (md *Doc) Write(content string) (*Doc, error) {
+	err := md.write(content)
+	if err != nil {
+		return nil, err
+	}
+	return md, nil
 }
 
 // Writeln writes a new line.
-func (md *Doc) Writeln() *Doc {
-	md.write("\n")
-	return md
+func (md *Doc) Writeln() (*Doc, error) {
+	err := md.write("\n")
+	if err != nil {
+		return nil, err
+	}
+	return md, err
 }
 
 // WriteLines writes a given number of new lines.
-func (md *Doc) WriteLines(lines int) *Doc {
+func (md *Doc) WriteLines(lines int) (*Doc, error) {
 	for i := 0; i < lines; i++ {
-		md.Writeln()
+		_, err := md.Writeln()
+		if err != nil {
+			return nil, err
+		}
 	}
-	return md
-}
-
-// GetMultiCode returns a multi-line code block for the given text with the given language.
-func (md *Doc) GetMultiCode(content string, contentType string) string {
-	return fmt.Sprintf("``` %s\n%s\n```\n", contentType, content)
+	return md, nil
 }
 
 // WriteMultiCode writes a multi-line code block for the given text with the given language.
-func (md *Doc) WriteMultiCode(content, t string) *Doc {
-	md.write(md.GetMultiCode(content, t))
-	return md
+func (md *Doc) WriteMultiCode(content, t string) (*Doc, error) {
+	err := md.write(GetMultiCode(content, t))
+	if err != nil {
+		return nil, err
+	}
+	return md, nil
 }
 
 // WriteCodeLine writes a single line of highlighted code for the given text..
-func (md *Doc) WriteCodeLine(content string) *Doc {
-	md.WriteCode(content)
-	md.Writeln()
-	return md
-}
-
-// GetCode returns a single line of highlighted code for the given text.
-func (md *Doc) GetCode(content string) string {
-	return fmt.Sprintf("`%s`", content)
+func (md *Doc) WriteCodeLine(content string) (*Doc, error) {
+	_, err := md.WriteCode(content)
+	if err != nil {
+		return nil, err
+	}
+	_, err = md.Writeln()
+	if err != nil {
+		return nil, err
+	}
+	return md, nil
 }
 
 // WriteCode writes a single line of highlighted code for the given text.
-func (md *Doc) WriteCode(content string) *Doc {
-	md.write(md.GetCode(content))
-	return md
-}
-
-// GetLink returns a link for the given text and url.
-func (md *Doc) GetLink(desc, url string) string {
-	return fmt.Sprintf("[%s](%s)", desc, url)
+func (md *Doc) WriteCode(content string) (*Doc, error) {
+	err := md.write(GetMonospaceCode(content))
+	if err != nil {
+		return nil, err
+	}
+	return md, nil
 }
 
 // WriteLink writes a link for the given text and url.
-func (md *Doc) WriteLink(desc, url string) *Doc {
-	md.write(md.GetLink(desc, url))
-	return md
+func (md *Doc) WriteLink(desc, url string) (*Doc, error) {
+	err := md.write(GetLink(desc, url))
+	if err != nil {
+		return nil, err
+	}
+	return md, nil
 }
 
 // WriteLinkLine writes a link for the given text and url with a newline.
-func (md *Doc) WriteLinkLine(desc, url string) *Doc {
-	md.WriteLink(desc, url)
-	md.WriteLines(2)
-	return md
-}
-
-// GetTable returns the given table as a string.
-func (md *Doc) GetTable(t *Table) string {
-	return t.GetString()
+func (md *Doc) WriteLinkLine(desc, url string) (*Doc, error) {
+	_, err := md.WriteLink(desc, url)
+	if err != nil {
+		return nil, err
+	}
+	_, err = md.WriteLines(2)
+	if err != nil {
+		return nil, err
+	}
+	return md, nil
 }
 
 // WriteTable writes the given table.
-func (md *Doc) WriteTable(t *Table) *Doc {
-	md.write(md.GetTable(t))
-	return md
-}
-
-// SetTableTitle sets the title of the table on the given column.
-func (t *Table) SetTableTitle(col int, content string) *Table {
-	t.body[0][col] = content
-	return t
-}
-
-// SetTableContent sets the content of the table on the given row and column.
-func (t *Table) SetTableContent(row, col int, content string) *Table {
-	row = row + 2
-	t.body[row][col] = content
-	return t
-}
-
-func (t *Table) GetString() string {
-	var buffer strings.Builder
-	for _, row := range t.body {
-		buffer.WriteString("|")
-		for _, col := range row {
-			buffer.WriteString(col)
-			buffer.WriteString("|")
-		}
-		buffer.WriteString("\n")
-
-	}
-	return buffer.String()
-}
-
-// NewTable constructs a blank table with the given number of rows and columns.
-func NewTable(row, col int) *Table {
-	t := new(Table)
-	row = row + 2
-	t.body = make([][]string, row)
-	for i := 0; i < row; i++ {
-		t.body[i] = make([]string, col)
-		if i == 1 {
-			for j := 0; j < col; j++ {
-				t.body[i][j] = "----"
-			}
-		}
-	}
-	return t
-}
-
-// GetList return a list string from the given struct.
-func GetList(tree *ListNode, level int) string {
-	str := strings.Builder{}
-	if tree != nil {
-		str.WriteString(strings.Repeat("    ", level))
-		str.WriteString("* " + tree.Value)
-		str.WriteString("\n")
-
-		for _, child := range tree.Children {
-			str.WriteString(GetList(child, level+1))
-		}
-	} else {
-		str.WriteString("\n")
-	}
-	return str.String()
+func (md *Doc) WriteTable(t *Table) (*Doc, error) {
+	err := md.write(t.GetTable())
+	return md, err
 }
 
 // WriteList writes the given list to the document.
-func (md *Doc) WriteList(tree *ListNode) *Doc {
-	doc := NewDoc()
-	doc.Write(GetList(tree, 0))
-	return doc
+func (md *Doc) WriteList(tree *ListNode) (*Doc, error) {
+	_, err := md.Write(tree.GetList(0))
+	return md, err
 }
 
 // Export writes the entire content to a given file.
