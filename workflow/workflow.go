@@ -10,6 +10,7 @@ import (
 
 var l = logger.GetLogger("Workflow: ")
 
+// ParseFiles accepts a glob pattern for argo workflow template files, parses them and returns them as TemplateFile structs
 func ParseFiles(pattern string) ([]*TemplateFile, error) {
 	l.Printf("hello %v\n", pattern)
 	var result []*TemplateFile
@@ -33,6 +34,7 @@ func ParseFiles(pattern string) ([]*TemplateFile, error) {
 	return result, nil
 }
 
+// parseFile parses a single argo workflow template file and returns that as a TemplateFile object
 func parseFile(path string) (*TemplateFile, error) {
 	yamlNode := yaml.Node{}
 
