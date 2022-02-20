@@ -17,8 +17,8 @@ type ListNode struct {
 	// Value is the content of the list item.
 	Value string
 
-	// ChildrenType is the type of the Children list(ListTypeOrdered | ListTypeUnordered).
-	ChildrenType ListType
+	// NodeType is the type of the Children list(ListTypeOrdered | ListTypeUnordered).
+	NodeType ListType
 
 	// Children is the child nodes(nested list) of the list item.
 	Children []*ListNode
@@ -32,10 +32,10 @@ func (tree *ListNode) GetList(count, level int) string {
 			str.WriteString("\n")
 		} else {
 			str.WriteString(strings.Repeat("    ", level))
-			if tree.ChildrenType == ListTypeOrdered {
+			if tree.NodeType == ListTypeOrdered {
 				li := fmt.Sprintf("%d. %s\n", count, tree.Value)
 				str.WriteString(li)
-			} else {
+			} else if tree.NodeType == ListTypeUnordered {
 				li := fmt.Sprintf("* %s\n", tree.Value)
 				str.WriteString(li)
 			}

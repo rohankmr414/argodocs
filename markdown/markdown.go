@@ -36,19 +36,6 @@ func (md *Doc) WriteHeader(content string, level int) (*Doc, error) {
 	return md, nil
 }
 
-// WriteWordLine writes a line with provided text with a newline.
-func (md *Doc) WriteWordLine(content string) (*Doc, error) {
-	err := md.write(content)
-	if err != nil {
-		return nil, err
-	}
-	_, err = md.Writeln()
-	if err != nil {
-		return nil, err
-	}
-	return md, nil
-}
-
 // Write writes a string to the document.
 func (md *Doc) Write(content string) (*Doc, error) {
 	err := md.write(content)
@@ -116,7 +103,7 @@ func (md *Doc) WriteTable(t *Table) (*Doc, error) {
 
 // WriteList writes the given list to the document.
 func (md *Doc) WriteList(tree *ListNode) (*Doc, error) {
-	_, err := md.Write(tree.GetList(0, 0))
+	_, err := md.Write(tree.GetList(0, -1))
 	if err != nil {
 		return nil, err
 	}
