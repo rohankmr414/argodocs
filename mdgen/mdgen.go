@@ -59,20 +59,29 @@ func GetMdDoc(templateFile *workflow.TemplateFile) (*markdown.Doc, error) {
 	md.Writeln()
 
 	for _, template := range templateFile.Templates {
+		md.Write("---")
+		md.Writeln()
+		md.Writeln()
 		md.WriteHeader(template.Name, 3)
+		md.Writeln()
+		md.Write("Type: " + markdown.GetMonospaceCode(templateTypes[template.Type]))
+		md.Writeln()
 		md.Writeln()
 		md.Write(template.Description)
 		md.Writeln()
 
-		var inputs, outputs, paramList, artifactList markdown.ListNode
-
-		inputs.Value = "Inputs"
-		inputs.NodeType = markdown.ListTypeUnordered
-
-		paramList.Value = "Parameters"
-		paramList.NodeType = markdown.ListTypeUnordered
+		var inputs, inputParamList, inputArtifactList markdown.ListNode
+		var outputs, outputParamList, outputArtifactList markdown.ListNode
 
 		if template.Inputs != nil {
+			inputs.Value = "Inputs"
+			inputs.NodeType = markdown.ListTypeUnordered
+
+			if len(template.Inputs.Parameters) > 0 {
+				inputParamList.Value = "Parameters"
+				inputParamList.NodeType = markdown.ListTypeUnordered
+			}
+
 			for _, param := range template.Inputs.Parameters {
 				var child markdown.ListNode
 				trimmedDescription := strings.Trim(param.Description, "\n")
@@ -82,14 +91,14 @@ func GetMdDoc(templateFile *workflow.TemplateFile) (*markdown.Doc, error) {
 					child.Value = markdown.GetMonospaceCode(param.Name)
 				}
 				child.NodeType = markdown.ListTypeUnordered
-				paramList.Children = append(paramList.Children, &child)
+				inputParamList.Children = append(inputParamList.Children, &child)
 			}
-		}
 
-		artifactList.Value = "Artifacts"
-		artifactList.NodeType = markdown.ListTypeUnordered
+			if len(template.Inputs.Artifacts) > 0 {
+				inputArtifactList.Value = "Artifacts"
+				inputArtifactList.NodeType = markdown.ListTypeUnordered
+			}
 
-		if template.Inputs != nil {
 			for _, artifact := range template.Inputs.Artifacts {
 				var child markdown.ListNode
 				trimmedDescription := strings.Trim(artifact.Description, "\n")
@@ -99,20 +108,22 @@ func GetMdDoc(templateFile *workflow.TemplateFile) (*markdown.Doc, error) {
 					child.Value = markdown.GetMonospaceCode(artifact.Name)
 				}
 				child.NodeType = markdown.ListTypeUnordered
-				artifactList.Children = append(paramList.Children, &child)
+				inputArtifactList.Children = append(inputParamList.Children, &child)
 			}
 		}
 
-		inputs.Children = append(inputs.Children, &paramList)
-		inputs.Children = append(inputs.Children, &artifactList)
-
-		outputs.Value = "Outputs"
-		outputs.NodeType = markdown.ListTypeUnordered
-
-		paramList.Value = "Parameters"
-		paramList.NodeType = markdown.ListTypeUnordered
+		inputs.Children = append(inputs.Children, &inputParamList)
+		inputs.Children = append(inputs.Children, &inputArtifactList)
 
 		if template.Outputs != nil {
+			outputs.Value = "Outputs"
+			outputs.NodeType = markdown.ListTypeUnordered
+
+			if len(template.Outputs.Parameters) > 0 {
+				outputParamList.Value = "Parameters"
+				outputParamList.NodeType = markdown.ListTypeUnordered
+			}
+
 			for _, param := range template.Outputs.Parameters {
 				var child markdown.ListNode
 				trimmedDescription := strings.Trim(param.Description, "\n")
@@ -122,14 +133,14 @@ func GetMdDoc(templateFile *workflow.TemplateFile) (*markdown.Doc, error) {
 					child.Value = markdown.GetMonospaceCode(param.Name)
 				}
 				child.NodeType = markdown.ListTypeUnordered
-				paramList.Children = append(paramList.Children, &child)
+				outputParamList.Children = append(outputParamList.Children, &child)
 			}
-		}
 
-		artifactList.Value = "Artifacts"
-		artifactList.NodeType = markdown.ListTypeUnordered
+			if len(template.Outputs.Artifacts) > 0 {
+				outputArtifactList.Value = "Artifacts"
+				outputArtifactList.NodeType = markdown.ListTypeUnordered
+			}
 
-		if template.Outputs != nil {
 			for _, artifact := range template.Inputs.Artifacts {
 				var child markdown.ListNode
 				trimmedDescription := strings.Trim(artifact.Description, "\n")
@@ -139,12 +150,12 @@ func GetMdDoc(templateFile *workflow.TemplateFile) (*markdown.Doc, error) {
 					child.Value = markdown.GetMonospaceCode(artifact.Name)
 				}
 				child.NodeType = markdown.ListTypeUnordered
-				artifactList.Children = append(paramList.Children, &child)
+				outputArtifactList.Children = append(outputArtifactList.Children, &child)
 			}
 		}
 
-		outputs.Children = append(outputs.Children, &paramList)
-		outputs.Children = append(outputs.Children, &artifactList)
+		outputs.Children = append(outputs.Children, &outputParamList)
+		outputs.Children = append(outputs.Children, &outputArtifactList)
 
 		var tasks markdown.ListNode
 
