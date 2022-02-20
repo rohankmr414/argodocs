@@ -45,6 +45,7 @@ type Template struct {
 	ContainerImageTag string // If Type == CONTAINER_TEMPLATE
 	Inputs            *InputOutput
 	Outputs           *InputOutput
+	LineNumber        int
 	Tasks             []*Task // If Type == DAG_TEMPLATE
 }
 

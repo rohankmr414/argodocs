@@ -33,6 +33,7 @@ func parseTemplate(node *yaml.Node) (*Template, error) {
 				switch childNode.Value {
 				case "name":
 					result.Name = node.Content[index+1].Value
+					result.LineNumber = childNode.Line
 				case "inputs":
 					inputs, err := parseInputsOutputs(node.Content[index+1])
 					if err != nil {
