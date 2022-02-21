@@ -1,6 +1,6 @@
 # argodocs
 
-`argodocs` is a tool for generating high-quality documentation from argo workflow templates.
+`argodocs` is a tool to generate reference documentation for argo workflow templates.
 
 ## Usage
 ```
