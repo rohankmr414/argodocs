@@ -6,7 +6,7 @@ on: workflow_dispatch
 # workflow tasks
 jobs:
   generate:
-    name: Generate cross-platform builds
+    name: Generate cross-platform builds and release-artifacts
     runs-on: ubuntu-latest
     steps:
       - name: Checkout the repository
@@ -17,7 +17,7 @@ jobs:
           platforms: 'linux/amd64, darwin/amd64, windows/amd64'
           package: ''
           name: 'argodocs'
-          compress: 'true'
+          compress: 'false'
           dest: 'dist'
       - name: Create Release
         uses: marvinpinto/action-automatic-releases@v1.2.1
@@ -25,8 +25,8 @@ jobs:
           repo_token: "${{secrets.GITHUB_TOKEN }}"
           automatic_release_tag: "latest"
           prerelease: false
-          title: "argodocs-release-v${{ env.GITHUB_RUN_NUMBER }}"
+          title: "argodocs - Latest Release"
           files: |
             ./dist/argodocs-linux-amd64
             ./dist/argodocs-darwin-amd64
-            ./dist/argodocs-windows-amd64
+            ./dist/argodocs-windows-amd64.exe
