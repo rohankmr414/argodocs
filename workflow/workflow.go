@@ -1,18 +1,14 @@
 package workflow
 
 import (
-	"github.com/junaidrahim/argodocs/logger"
 	"gopkg.in/yaml.v3"
 	"io/ioutil"
 	"path/filepath"
 	"time"
 )
 
-var l = logger.GetLogger("Workflow: ")
-
 // ParseFiles accepts a glob pattern for argo workflow template files, parses them and returns them as TemplateFile structs
 func ParseFiles(pattern string) ([]*TemplateFile, error) {
-	l.Printf("hello %v\n", pattern)
 	var result []*TemplateFile
 
 	matches, err := filepath.Glob(pattern)
@@ -21,11 +17,9 @@ func ParseFiles(pattern string) ([]*TemplateFile, error) {
 	}
 
 	for _, path := range matches {
-		l.Printf(path)
 		var templateFile *TemplateFile
 		templateFile, err = parseFile(path)
 		if err != nil {
-			l.Printf("error for parsing file %v", path)
 			continue
 		}
 		result = append(result, templateFile)

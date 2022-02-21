@@ -1,72 +1,83 @@
 package cmd
 
 import (
-	"fmt"
+	"github.com/junaidrahim/argodocs/logger"
+	"github.com/junaidrahim/argodocs/markdown"
 	"github.com/junaidrahim/argodocs/mdgen"
 	"github.com/junaidrahim/argodocs/workflow"
 	"github.com/spf13/cobra"
 	"os"
+	"path/filepath"
 	"strings"
 )
 
+var (
+	outputPrefix string
+)
+
 func NewGenerateCommand() *cobra.Command {
-	var (
-		outputPrefix         string
-		relativeOutputPrefix string
-	)
 	// generateCmd represents the generate command
 	var generateCmd = &cobra.Command{
-		Use:   "generate PATH --output-prefix=PREFIX --relative-output-prefix=PREFIX",
+		Use:   "generate PATH --output-prefix=PREFIX",
 		Short: "Generate docs from workflow manifest.",
 		Long:  `Generate reference docs from argo workflows.`,
-		Run: func(cmd *cobra.Command, args []string) {
-			dir, err := os.Getwd()
-			if err != nil {
-				fmt.Println(err)
-				os.Exit(1)
-			}
-			fmt.Println("Generating docs from", dir)
-			for _, arg := range args {
-				templates, err := workflow.ParseFiles(arg)
-				if err != nil {
-					panic(err)
-				}
-				for _, wf := range templates {
-					doc, err := mdgen.GetMdDoc(wf)
-					if err != nil {
-						panic(err)
-					}
-
-					wfPathList := strings.Split(wf.FilePath, "/")
-					//wfFileName := wfPathList[len(wfPathList)-1]
-					if len(wfPathList) > 0 {
-						wfPathList = wfPathList[:len(wfPathList)-1]
-					}
-					wfPath := strings.Join(wfPathList, "/")
-					if len(wfPath) > 0 {
-						wfPath += "/"
-					}
-					err = os.MkdirAll(relativeOutputPrefix+"/"+outputPrefix+"/"+wfPath, os.ModePerm)
-					if err != nil {
-						panic(err)
-					}
-					fname := strings.Split(wf.FilePath, ".")
-					if len(fname) > 0 {
-						fname = fname[:len(fname)-1]
-					}
-					writeFilePath := strings.Join(fname, "")
-					path := relativeOutputPrefix + "/" + outputPrefix + "/" + writeFilePath + ".md"
-					err = doc.Export(path)
-					if err != nil {
-						panic(err)
-					}
-				}
-			}
-		},
+		Run:   generate,
 	}
 
-	generateCmd.Flags().StringVar(&outputPrefix, "output-prefix", "docs", "Output location prefix")
-	generateCmd.Flags().StringVar(&relativeOutputPrefix, "relative-output-prefix", "./", "Relative output location prefix")
+	generateCmd.Flags().StringVar(
+		&outputPrefix,
+		"output-prefix",
+		"",
+		"Markdown output path prefix absolute or relative to the input YAML file",
+	)
 
 	return generateCmd
+}
+
+func generate(cmd *cobra.Command, args []string) {
+	var LOGGER = logger.GetLogger("[Command] ")
+
+	for _, arg := range args {
+		LOGGER.Printf("Parsing file: %v", arg)
+		parsedTemplateFiles, err := workflow.ParseFiles(arg)
+		if err != nil {
+			panic(err)
+		}
+		for _, parsedTemplateFile := range parsedTemplateFiles {
+			var path string
+			if outputPrefix == "" {
+				yamlFileNameSplit := strings.Split(parsedTemplateFile.FilePath, "/")
+				mdFileName := strings.Replace(yamlFileNameSplit[len(yamlFileNameSplit)-1], ".yaml", ".md", 1)
+				mdFileName = strings.Replace(mdFileName, ".yml", ".md", 1)
+				path = "./" + "docs" + "/" + mdFileName
+			} else {
+				if strings.HasPrefix(outputPrefix, ".") {
+					yamlFileNameSplit := strings.Split(parsedTemplateFile.FilePath, "/")
+					mdFileName := strings.Replace(yamlFileNameSplit[len(yamlFileNameSplit)-1], ".yaml", ".md", 1)
+					mdFileName = strings.Replace(mdFileName, ".yml", ".md", 1)
+
+					yamlPathSplit := strings.Split(parsedTemplateFile.FilePath, "/")
+					mdFullPath := strings.Join(yamlPathSplit[:len(yamlPathSplit)-1], "/") + "/" + outputPrefix + "/" + mdFileName
+					path = mdFullPath
+				} else {
+					yamlFileNameSplit := strings.Split(parsedTemplateFile.FilePath, "/")
+					mdFileName := strings.Replace(yamlFileNameSplit[len(yamlFileNameSplit)-1], ".yaml", ".md", 1)
+					mdFileName = strings.Replace(mdFileName, ".yml", ".md", 1)
+					path = outputPrefix + "/" + mdFileName
+				}
+			}
+			err := os.MkdirAll(filepath.Dir(path), os.ModePerm)
+			if err != nil {
+				LOGGER.Panicln(err)
+			}
+
+			var doc *markdown.Doc
+			doc, err = mdgen.GetMdDoc(parsedTemplateFile)
+			LOGGER.Printf("Writing File: %v", path)
+			err = doc.Export(path)
+			if err != nil {
+				LOGGER.Panicln(err)
+			}
+		}
+	}
 }

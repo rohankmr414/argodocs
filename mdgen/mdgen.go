@@ -7,6 +7,7 @@ import (
 	"strings"
 )
 
+// GetMdDoc transforms a workflow.TemplateFile into an opinionated markdown file
 func GetMdDoc(templateFile *workflow.TemplateFile) (*markdown.Doc, error) {
 	templateTypes := map[workflow.TemplateType]string{
 		workflow.CONTAINER_SET_TEMPLATE: "Container Set",

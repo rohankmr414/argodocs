@@ -28,7 +28,7 @@ type ListNode struct {
 	Children []*ListNode
 }
 
-// GetList return a list string from the given struct.
+// GetList returns a list string from the given struct.
 func (tree *ListNode) GetList(count, level int) string {
 	str := strings.Builder{}
 	if tree != nil {
