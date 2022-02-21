@@ -19,11 +19,11 @@ jobs:
         run: mkdir -p $GITHUB_WORKSPACE/dist
       - name: Multi platform build
         run: |
-          GOOS=linux GOARCH=amd64 go build -v ./ -o ./dist/argodocs-linux-amd64
-          GOOS=linux GOARCH=arm64 go build -v ./ -o ./dist/argodocs-linux-arm64
-          GOOS=darwin GOARCH=amd64 go build -v ./ -o ./dist/argodocs-darwin-amd64
-          GOOS=darwin GOARCH=arm64 go build -v ./ -o ./dist/argodocs-darwin-arm64
-          GOOS=windows GOARCH=amd64 go build -v ./ -o ./dist/argodocs-windows-amd64.exe
+          GOOS=linux GOARCH=amd64 go build -o ./dist/argodocs-linux-amd64 -v .
+          GOOS=linux GOARCH=arm64 go build -o ./dist/argodocs-linux-arm64 -v .
+          GOOS=darwin GOARCH=amd64 go build -o ./dist/argodocs-darwin-amd64 -v .
+          GOOS=darwin GOARCH=arm64 go build -o ./dist/argodocs-darwin-arm64 -v .
+          GOOS=windows GOARCH=amd64 go build -o ./dist/argodocs-windows-amd64.exe -v .
 
       - name: Generate commit hash
         id: vars
