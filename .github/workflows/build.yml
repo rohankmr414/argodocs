@@ -12,21 +12,26 @@ jobs:
       - name: Checkout the repository
         uses: actions/checkout@v2
       - name: Generate build files
-        uses: thatisuday/go-cross-build@v1
+        uses: @v1
         with:
-          platforms: 'linux/amd64, darwin/amd64, windows/amd64'
+          platforms: 'linux/amd64, darwin/amd64, darwin/arm64, windows/amd64'
           package: ''
           name: 'argodocs'
           compress: 'false'
           dest: 'dist'
+      - name: Generate commit hash
+        id: vars
+        run: |
+          echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
       - name: Create Release
         uses: marvinpinto/action-automatic-releases@v1.2.1
         with:
           repo_token: "${{secrets.GITHUB_TOKEN }}"
           automatic_release_tag: "latest"
           prerelease: false
-          title: "argodocs - Latest Release"
+          title: "argodocs - ${{ steps.vars.outputs.sha_short }}"
           files: |
             ./dist/argodocs-linux-amd64
             ./dist/argodocs-darwin-amd64
+            ./dist/argodocs-darwin-arm64
             ./dist/argodocs-windows-amd64.exe
