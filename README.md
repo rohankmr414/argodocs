@@ -3,7 +3,7 @@
 `argodocs` is a tool for generating high-quality documentation from argo workflow templates.
 
 ## Usage
-```shell
+```
 Usage:
   argodocs [command]
 
@@ -18,6 +18,6 @@ Use "argodocs [command] --help" for more information about a command.
 ```
 
 ## Generate
-```shell
+```
 argodocs generate **/*.yaml --output-prefix=../docs/
 ```
