@@ -1,8 +1,8 @@
 package mdgen
 
 import (
-	"github.com/junaidrahim/argodocs/markdown"
-	"github.com/junaidrahim/argodocs/workflow"
+	"github.com/rohankmr414/argodocs/markdown"
+	"github.com/rohankmr414/argodocs/workflow"
 	"strconv"
 	"strings"
 )

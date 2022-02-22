@@ -1,4 +1,4 @@
-module github.com/junaidrahim/argodocs
+module github.com/rohankmr414/argodocs
 
 go 1.17
 

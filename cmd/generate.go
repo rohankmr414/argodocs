@@ -1,10 +1,10 @@
 package cmd
 
 import (
-	"github.com/junaidrahim/argodocs/logger"
-	"github.com/junaidrahim/argodocs/markdown"
-	"github.com/junaidrahim/argodocs/mdgen"
-	"github.com/junaidrahim/argodocs/workflow"
+	"github.com/rohankmr414/argodocs/logger"
+	"github.com/rohankmr414/argodocs/markdown"
+	"github.com/rohankmr414/argodocs/mdgen"
+	"github.com/rohankmr414/argodocs/workflow"
 	"github.com/spf13/cobra"
 	"os"
 	"path/filepath"
