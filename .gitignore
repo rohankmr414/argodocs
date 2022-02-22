@@ -27,3 +27,5 @@ go.work
 /build/
 /dist/
 /out/
+
+.vscode/
