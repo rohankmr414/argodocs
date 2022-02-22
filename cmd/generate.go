@@ -73,6 +73,9 @@ func generate(cmd *cobra.Command, args []string) {
 
 			var doc *markdown.Doc
 			doc, err = mdgen.GetMdDoc(parsedTemplateFile)
+			if err != nil {
+				LOGGER.Panicln(err)
+			}
 			LOGGER.Printf("Writing File: %v", path)
 			err = doc.Export(path)
 			if err != nil {
