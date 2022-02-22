@@ -1,24 +1,44 @@
-name: Generate release-artifacts
+name: Build and Release
 
 # on events
-on:
-  release:
-    types:
-      - created
+on: workflow_dispatch
 
 # workflow tasks
 jobs:
   generate:
-    name: Generate cross-platform builds
+    name: Generate cross-platform builds and release artifacts
     runs-on: ubuntu-latest
     steps:
       - name: Checkout the repository
         uses: actions/checkout@v2
-      - name: Generate build files
-        uses: thatisuday/go-cross-build@v1
+      - name: Set up go
+        uses: actions/setup-go@v2
         with:
-          platforms: 'linux/amd64, darwin/amd64, windows/amd64'
-          package: 'cmd/argodocs'
-          name: 'argodocs'
-          compress: 'true'
-          dest: 'dist'
+          go-version: 1.17
+      - name: Create output directory
+        run: mkdir -p $GITHUB_WORKSPACE/dist
+      - name: Multi platform build
+        run: |
+          GOOS=linux GOARCH=amd64 go build -o ./dist/argodocs-linux-amd64 -v .
+          GOOS=linux GOARCH=arm64 go build -o ./dist/argodocs-linux-arm64 -v .
+          GOOS=darwin GOARCH=amd64 go build -o ./dist/argodocs-darwin-amd64 -v .
+          GOOS=darwin GOARCH=arm64 go build -o ./dist/argodocs-darwin-arm64 -v .
+          GOOS=windows GOARCH=amd64 go build -o ./dist/argodocs-windows-amd64.exe -v .
+
+      - name: Generate commit hash
+        id: vars
+        run: |
+          echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
+      - name: Create Release
+        uses: marvinpinto/action-automatic-releases@v1.2.1
+        with:
+          repo_token: "${{secrets.GITHUB_TOKEN }}"
+          automatic_release_tag: "latest"
+          prerelease: false
+          title: "argodocs - ${{ steps.vars.outputs.sha_short }}"
+          files: |
+            ./dist/argodocs-linux-amd64
+            ./dist/argodocs-linux-arm64
+            ./dist/argodocs-darwin-amd64
+            ./dist/argodocs-darwin-arm64
+            ./dist/argodocs-windows-amd64.exe
