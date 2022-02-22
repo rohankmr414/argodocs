@@ -1,7 +1,15 @@
 # argodocs
 
+
 `argodocs` is a tool to generate reference documentation for argo workflow templates.
 
+## Installation
+
+
+```
+go install github.com/junaidrahim/argodocs
+```
+Add `$GOPATH/bin` to your `$PATH` or copy `$GOPATH/bin/argodocs` to your `$PATH`.
 ## Usage
 ```
 Usage:
