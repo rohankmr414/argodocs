@@ -4,7 +4,7 @@
 
 |Kind|Version|Entrypoint Template|Last Updated At|
 |----|----|----|----|
-|Workflow|argoproj.io/v1alpha1|perf-infra|Monday, 11-Apr-22 11:30:12 IST|
+|Workflow|argoproj.io/v1alpha1|perf-infra|Monday, 11-Apr-22 11:57:23 IST|
 
 Stress test to test upper bounds of concurrent pods
 ## Templates
