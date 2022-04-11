@@ -50,5 +50,10 @@ func parseFile(path string) (*TemplateFile, error) {
 
 	templateFile.FilePath = path
 	templateFile.LastUpdatedAt = time.Now().Format(time.RFC850)
+
+	if templateFile.EntrypointTemplate == "" {
+		templateFile.EntrypointTemplate = "nil"
+	}
+	
 	return templateFile, nil
 }
