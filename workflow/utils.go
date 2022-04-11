@@ -11,7 +11,11 @@ func removeLeadingPoundSigns(lines []string) []string {
 	var result []string
 	for _, line := range lines {
 		trimmedLine := strings.TrimLeftFunc(line, func(r rune) bool {
-			return r == '#' || r == ' '
+			return r == '#'
+		})
+
+		trimmedLine = strings.TrimLeftFunc(trimmedLine, func(r rune) bool {
+			return r == ' '
 		})
 
 		result = append(result, trimmedLine)

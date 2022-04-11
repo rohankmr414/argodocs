@@ -70,6 +70,11 @@ func parseTemplate(node *yaml.Node) (*Template, error) {
 					result.Type = PLUGIN_TEMPLATE
 				case "script":
 					result.Type = SCRIPT_TEMPLATE
+					containerImage, err := parseContainerImage(node.Content[index+1])
+					if err != nil {
+						return nil, err
+					}
+					result.ContainerImageTag = containerImage
 				case "initContainers":
 					result.HasInitContainer = true
 				}
