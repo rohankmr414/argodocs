@@ -22,6 +22,7 @@ func parseParameters(node *yaml.Node) ([]*Parameter, error) {
 
 func parseParameter(node *yaml.Node) (*Parameter, error) {
 	var result Parameter
+	result.Required = true
 
 	if node.Kind == yaml.MappingNode {
 		result.Description += cleanupComment(node.HeadComment)

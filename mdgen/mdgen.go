@@ -82,9 +82,17 @@ func GetMdDoc(templateFile *workflow.TemplateFile) (*markdown.Doc, error) {
 				var inputParamChild markdown.ListNode
 				trimmedDescription := strings.Trim(param.Description, "\n")
 				if trimmedDescription != "" {
-					inputParamChild.Value = markdown.GetMonospaceCode(param.Name) + " - " + trimmedDescription
+					if param.Required {
+						inputParamChild.Value = markdown.GetMonospaceCode(param.Name) + " - (required) " + trimmedDescription
+					} else {
+						inputParamChild.Value = markdown.GetMonospaceCode(param.Name) + " - " + trimmedDescription
+					}
 				} else {
-					inputParamChild.Value = markdown.GetMonospaceCode(param.Name)
+					if param.Required {
+						inputParamChild.Value = markdown.GetMonospaceCode(param.Name) + " (required)"
+					} else {
+						inputParamChild.Value = markdown.GetMonospaceCode(param.Name)
+					}
 				}
 				inputParamChild.NodeType = markdown.ListTypeUnordered
 				inputParamList.Children = append(inputParamList.Children, &inputParamChild)
@@ -99,9 +107,17 @@ func GetMdDoc(templateFile *workflow.TemplateFile) (*markdown.Doc, error) {
 				var inputArtifactChild markdown.ListNode
 				trimmedDescription := strings.Trim(artifact.Description, "\n")
 				if trimmedDescription != "" {
-					inputArtifactChild.Value = markdown.GetMonospaceCode(artifact.Name) + " - " + trimmedDescription
+					if artifact.Required {
+						inputArtifactChild.Value = markdown.GetMonospaceCode(artifact.Name) + " - (required) " + trimmedDescription
+					} else {
+						inputArtifactChild.Value = markdown.GetMonospaceCode(artifact.Name) + " - " + trimmedDescription
+					}
 				} else {
-					inputArtifactChild.Value = markdown.GetMonospaceCode(artifact.Name)
+					if artifact.Required {
+						inputArtifactChild.Value = markdown.GetMonospaceCode(artifact.Name) + " (required)"
+					} else {
+						inputArtifactChild.Value = markdown.GetMonospaceCode(artifact.Name)
+					}
 				}
 				inputArtifactChild.NodeType = markdown.ListTypeUnordered
 				inputArtifactList.Children = append(inputArtifactList.Children, &inputArtifactChild)
