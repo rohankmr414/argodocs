@@ -62,6 +62,10 @@ func GetMdDoc(templateFile *workflow.TemplateFile) (*markdown.Doc, error) {
 		md.Write("\n")
 		md.Writeln(template.Description)
 
+		if template.Type == workflow.CONTAINER_TEMPLATE {
+			md.Writeln("\nImage: " + markdown.GetMonospaceCode(template.ContainerImageTag) + "\n")
+		}
+
 		// inputs
 		var inputs, inputParamList, inputArtifactList markdown.ListNode
 

@@ -50,7 +50,11 @@ func parseTemplate(node *yaml.Node) (*Template, error) {
 					result.Type = CONTAINER_SET_TEMPLATE
 				case "container":
 					result.Type = CONTAINER_TEMPLATE
-					// add container image tag
+					containerImage, err := parseContainerImage(node.Content[index+1])
+					if err != nil {
+						return nil, err
+					}
+					result.ContainerImageTag = containerImage
 				case "dag":
 					result.Type = DAG_TEMPLATE
 					tasks, err := parseTasks(node.Content[index+1])
@@ -76,4 +80,19 @@ func parseTemplate(node *yaml.Node) (*Template, error) {
 	}
 
 	return nil, errors.New("YAML node is not a mapping node")
+}
+
+func parseContainerImage(node *yaml.Node) (string, error) {
+	if node.Kind == yaml.MappingNode {
+		for index := 0; index < len(node.Content); index += 2 {
+			childNode := node.Content[index]
+			switch childNode.Value {
+			case "image":
+				containerTag := node.Content[index+1].Value
+				return containerTag, nil
+			}
+		}
+	}
+
+	return "", errors.New("YAML node is not a mapping node")
 }
