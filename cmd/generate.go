@@ -1,23 +1,22 @@
 package cmd
 
 import (
+	"os"
+	"path/filepath"
+	"strings"
+
 	"github.com/rohankmr414/argodocs/logger"
 	"github.com/rohankmr414/argodocs/markdown"
 	"github.com/rohankmr414/argodocs/mdgen"
 	"github.com/rohankmr414/argodocs/workflow"
 	"github.com/spf13/cobra"
-	"os"
-	"path/filepath"
-	"strings"
 )
 
-var (
-	outputPrefix string
-)
+var outputPrefix string
 
 func NewGenerateCommand() *cobra.Command {
 	// generateCmd represents the generate command
-	var generateCmd = &cobra.Command{
+	generateCmd := &cobra.Command{
 		Use:   "generate PATH --output-prefix=PREFIX",
 		Short: "Generate docs from workflow manifest.",
 		Long:  `Generate reference docs from argo workflows.`,
@@ -35,7 +34,7 @@ func NewGenerateCommand() *cobra.Command {
 }
 
 func generate(cmd *cobra.Command, args []string) {
-	var LOGGER = logger.GetLogger("[Command] ")
+	LOGGER := logger.GetLogger("[Command] ")
 
 	for _, arg := range args {
 		LOGGER.Printf("Parsing file: %v", arg)

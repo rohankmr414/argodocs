@@ -2,8 +2,9 @@ package workflow
 
 import (
 	"errors"
-	"gopkg.in/yaml.v3"
 	"strings"
+
+	"gopkg.in/yaml.v3"
 )
 
 func parseTasks(node *yaml.Node) ([]*Task, error) {

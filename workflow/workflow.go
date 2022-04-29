@@ -1,10 +1,11 @@
 package workflow
 
 import (
-	"gopkg.in/yaml.v3"
 	"io/ioutil"
 	"path/filepath"
 	"time"
+
+	"gopkg.in/yaml.v3"
 )
 
 // ParseFiles accepts a glob pattern for argo workflow template files, parses them and returns them as TemplateFile structs
@@ -54,6 +55,6 @@ func parseFile(path string) (*TemplateFile, error) {
 	if templateFile.EntrypointTemplate == "" {
 		templateFile.EntrypointTemplate = "nil"
 	}
-	
+
 	return templateFile, nil
 }

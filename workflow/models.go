@@ -1,7 +1,9 @@
 package workflow
 
-type TemplateType int
-type ArtifactType int
+type (
+	TemplateType int
+	ArtifactType int
+)
 
 const (
 	CONTAINER_SET_TEMPLATE TemplateType = iota

@@ -1,10 +1,11 @@
 package mdgen
 
 import (
-	"github.com/rohankmr414/argodocs/markdown"
-	"github.com/rohankmr414/argodocs/workflow"
 	"strconv"
 	"strings"
+
+	"github.com/rohankmr414/argodocs/markdown"
+	"github.com/rohankmr414/argodocs/workflow"
 )
 
 // GetMdDoc transforms a workflow.TemplateFile into an opinionated markdown file
