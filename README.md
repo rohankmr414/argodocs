@@ -1,5 +1,6 @@
 # argodocs
 [![Go Reference](https://pkg.go.dev/badge/pkg.go.dev/github.com/rohankmr414/argodocs.svg)](https://pkg.go.dev/github.com/rohankmr414/argodocs) [![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/rohankmr414/argodocs)](https://github.com/rohankmr414/argodocs/releases/tag/latest) [![build](https://github.com/rohankmr414/argodocs/actions/workflows/build.yaml/badge.svg)](https://github.com/rohankmr414/argodocs/actions/workflows/build.yaml) [![License: MIT](https://img.shields.io/badge/License-MIT-black.svg)](https://opensource.org/licenses/MIT)
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Frohankmr414%2Fargodocs.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Frohankmr414%2Fargodocs?ref=badge_shield)
 
 
 `argodocs` is a tool to generate reference documentation for argo workflow templates.
@@ -38,3 +39,5 @@ If you're interested in contributing to argodocs, check out [CONTRIBUTING.md](CO
 ## License
 
 Copyright (c) **Rohan Kumar** and **Junaid Rahim**. All rights reserved. Released under the [MIT](LICENSE) License
+
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Frohankmr414%2Fargodocs.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2Frohankmr414%2Fargodocs?ref=badge_large)
